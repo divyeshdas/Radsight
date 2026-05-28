@@ -13,6 +13,8 @@ from core.config import get_ai_settings
 from core.model_registry import registry
 from nlp.pipeline import run_full_pipeline, run_batch_pipeline
 from ocr.paddle_ocr import extract_text
+from search.vector_search import semantic_search, index_report_embedding, build_index_from_mongodb, get_cache_stats
+from search.faiss_index import faiss_manager
 import structlog
 
 logger = structlog.get_logger(__name__)
@@ -46,8 +48,19 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning("Sentence-BERT load failed", error=str(e))
 
+    try:
+        faiss_manager.initialize()
+        logger.info("FAISS index initialized", vectors=faiss_manager.total_vectors)
+    except Exception as e:
+        logger.warning("FAISS init failed", error=str(e))
+
     logger.info("AI Services ready — heavy models load on first request")
     yield
+    try:
+        if faiss_manager.total_vectors > 0:
+            faiss_manager.save()
+    except Exception:
+        pass
     logger.info("AI Services shutdown")
 
 
@@ -221,3 +234,41 @@ async def _update_report_in_db(report_id: str, result: dict, ocr_confidence: Opt
             }},
             upsert=True,
         )
+
+        faiss_idx = await index_report_embedding(report_id, result["embedding"])
+        await db["embeddings"].update_one(
+            {"report_id": report_id},
+            {"$set": {"faiss_index_id": faiss_idx}},
+        )
+
+
+# ─── Search routes ────────────────────────────────────────────────────────────
+
+class SearchRequest(BaseModel):
+    query: str
+    k: int = 10
+    severity_filter: Optional[str] = None
+    min_score: float = 0.30
+
+
+@app.post("/search/semantic")
+async def search_semantic(request: SearchRequest):
+    if not request.query.strip():
+        raise HTTPException(status_code=400, detail="Query cannot be empty")
+    return await semantic_search(
+        query=request.query,
+        k=request.k,
+        severity_filter=request.severity_filter,
+        min_score=request.min_score,
+    )
+
+
+@app.post("/search/index/rebuild")
+async def rebuild_index():
+    result = await build_index_from_mongodb()
+    return result
+
+
+@app.get("/search/stats")
+async def search_stats():
+    return get_cache_stats()

@@ -19,7 +19,7 @@ from app.core.exceptions import (
 )
 from app.db.mongodb import connect_db, close_db
 from app.db.redis_client import connect_redis, close_redis
-from app.api.routes import auth, reports, users
+from app.api.routes import auth, reports, users, search
 
 settings = get_settings()
 logger = get_logger(__name__)
@@ -68,6 +68,7 @@ app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(reports.router, prefix="/api/v1")
 app.include_router(users.router, prefix="/api/v1")
+app.include_router(search.router, prefix="/api/v1")
 
 
 @app.get("/health", tags=["system"])
