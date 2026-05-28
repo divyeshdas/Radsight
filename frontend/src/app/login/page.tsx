@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Stethoscope } from "lucide-react";
+import { Aperture } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useAuthStore } from "@/store/auth";
@@ -46,16 +46,16 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
 
         {/* Logo */}
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-4 mb-10">
           <div
-            className="w-11 h-11 rounded-xl flex items-center justify-center shadow-md"
+            className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-md"
             style={{ backgroundColor: "#2E7D32" }}
           >
-            <Stethoscope size={22} className="text-white" />
+            <Aperture size={30} className="text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold" style={{ color: "#1A1A1A" }}>RadSight</h1>
-            <p className="text-xs font-medium" style={{ color: "#4A6741" }}>
+            <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#1A1A1A" }}>RadSight</h1>
+            <p className="text-sm font-medium mt-0.5" style={{ color: "#4A6741" }}>
               Radiology Command Centre
             </p>
           </div>
@@ -63,22 +63,22 @@ export default function LoginPage() {
 
         {/* Card */}
         <div
-          className="rounded-2xl p-8 shadow-lg"
+          className="rounded-2xl p-9 shadow-lg"
           style={{
             backgroundColor: "#FFFFFF",
             border: "1px solid #C8E6C9",
           }}
         >
-          <h2 className="text-base font-semibold mb-1" style={{ color: "#111111" }}>
+          <h2 className="text-xl font-semibold mb-1.5" style={{ color: "#111111" }}>
             Sign in to your workspace
           </h2>
-          <p className="text-sm mb-7" style={{ color: "#555555" }}>
+          <p className="text-base mb-8" style={{ color: "#555555" }}>
             Enter your credentials to access RadSight
           </p>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium" style={{ color: "#222222" }}>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-base font-medium" style={{ color: "#222222" }}>
                 Email address
               </label>
               <input
@@ -86,7 +86,7 @@ export default function LoginPage() {
                 placeholder="you@hospital.org"
                 autoComplete="email"
                 {...register("email")}
-                className="w-full rounded-lg px-3 py-2.5 text-sm outline-none transition-colors"
+                className="w-full rounded-lg px-4 py-3 text-base outline-none transition-colors"
                 style={{
                   backgroundColor: "#F7FBF7",
                   border: "1px solid #A5D6A7",
@@ -96,12 +96,12 @@ export default function LoginPage() {
                 onBlur={(e) => (e.target.style.borderColor = "#A5D6A7")}
               />
               {errors.email && (
-                <p className="text-xs" style={{ color: "#C62828" }}>{errors.email.message}</p>
+                <p className="text-sm" style={{ color: "#C62828" }}>{errors.email.message}</p>
               )}
             </div>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium" style={{ color: "#222222" }}>
+            <div className="flex flex-col gap-2">
+              <label className="text-base font-medium" style={{ color: "#222222" }}>
                 Password
               </label>
               <input
@@ -109,7 +109,7 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 autoComplete="current-password"
                 {...register("password")}
-                className="w-full rounded-lg px-3 py-2.5 text-sm outline-none transition-colors"
+                className="w-full rounded-lg px-4 py-3 text-base outline-none transition-colors"
                 style={{
                   backgroundColor: "#F7FBF7",
                   border: "1px solid #A5D6A7",
@@ -119,29 +119,29 @@ export default function LoginPage() {
                 onBlur={(e) => (e.target.style.borderColor = "#A5D6A7")}
               />
               {errors.password && (
-                <p className="text-xs" style={{ color: "#C62828" }}>{errors.password.message}</p>
+                <p className="text-sm" style={{ color: "#C62828" }}>{errors.password.message}</p>
               )}
             </div>
 
             {error && (
-              <p className="text-sm text-center" style={{ color: "#C62828" }}>{error}</p>
+              <p className="text-base text-center" style={{ color: "#C62828" }}>{error}</p>
             )}
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity disabled:opacity-60"
+              className="w-full py-3 rounded-lg text-base font-semibold text-white transition-opacity disabled:opacity-60"
               style={{ backgroundColor: "#2E7D32" }}
             >
               {isSubmitting ? "Signing in…" : "Sign in"}
             </button>
           </form>
 
-          <div className="mt-6 pt-5" style={{ borderTop: "1px solid #E8F5E9" }}>
-            <p className="text-xs font-medium mb-2" style={{ color: "#777777" }}>
+          <div className="mt-7 pt-6" style={{ borderTop: "1px solid #E8F5E9" }}>
+            <p className="text-sm font-medium mb-2.5" style={{ color: "#777777" }}>
               Demo credentials
             </p>
-            <div className="space-y-1 font-mono text-xs" style={{ color: "#555555" }}>
+            <div className="space-y-1.5 font-mono text-sm" style={{ color: "#555555" }}>
               <p>admin@radsight.health / RadSight@Admin2024</p>
               <p>radiologist@radsight.health / RadSight@Rad2024</p>
             </div>
