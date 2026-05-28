@@ -42,7 +42,7 @@ export default function LoginPage() {
 
       {/* Background — real MRI suite photograph from Unsplash */}
       <Image
-        src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1920&auto=format&fit=crop&q=60"
+        src="https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=1920&auto=format&fit=crop&q=60"
         alt=""
         fill
         className="object-cover object-center"
