@@ -1,0 +1,118 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: radsight_mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: radsight_user
+      MONGO_INITDB_ROOT_PASSWORD: radsight_pass
+      MONGO_INITDB_DATABASE: radsight
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./docker/mongo-init.js:/docker-entrypoint-initdb.d/init.js:ro
+    networks:
+      - radsight_net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: radsight_redis
+    restart: unless-stopped
+    command: redis-server --requirepass radsight_redis_pass --maxmemory 512mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - radsight_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "radsight_redis_pass", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: radsight_backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./uploads:/app/uploads
+      - ./faiss_index:/app/faiss_index
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - radsight_net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  ai_services:
+    build:
+      context: ./ai-services
+      dockerfile: Dockerfile
+    container_name: radsight_ai
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./ai-services:/app
+      - ./uploads:/app/uploads
+      - ./faiss_index:/app/faiss_index
+    depends_on:
+      - redis
+    networks:
+      - radsight_net
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+
+  analytics:
+    build:
+      context: ./analytics
+      dockerfile: Dockerfile
+    container_name: radsight_analytics
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./analytics:/app
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - radsight_net
+
+networks:
+  radsight_net:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  redis_data:

@@ -1,0 +1,85 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.so
+*.dylib
+venv/
+.venv/
+env/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+build/
+.vercel/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.staging
+
+# Docker
+docker/volumes/
+
+# ML Models & Large Files
+*.bin
+*.pt
+*.pth
+*.onnx
+*.pkl
+*.h5
+models/
+checkpoints/
+faiss_index/
+*.index
+
+# Datasets (large files tracked separately)
+datasets/raw/*.csv
+datasets/raw/*.json
+datasets/raw/*.parquet
+
+# IDEs
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# MongoDB / Redis data
+data/
+
+# Railway / Vercel
+.railway/
