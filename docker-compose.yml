@@ -1,6 +1,9 @@
 version: "3.9"
 
 services:
+
+  # ── Infrastructure ──────────────────────────────────────────────────────────
+
   mongodb:
     image: mongo:7.0
     container_name: radsight_mongo
@@ -21,12 +24,18 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
+      start_period: 20s
 
   redis:
     image: redis:7.2-alpine
     container_name: radsight_redis
     restart: unless-stopped
-    command: redis-server --requirepass radsight_redis_pass --maxmemory 512mb --maxmemory-policy allkeys-lru
+    command: >
+      redis-server
+      --requirepass radsight_redis_pass
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+      --save 60 1000
     ports:
       - "6379:6379"
     volumes:
@@ -38,6 +47,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
+
+  # ── Application services ────────────────────────────────────────────────────
 
   backend:
     build:
@@ -45,14 +57,16 @@ services:
       dockerfile: Dockerfile
     container_name: radsight_backend
     restart: unless-stopped
-    env_file:
-      - .env
+    env_file: .env
+    environment:
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
       - ./uploads:/app/uploads
       - ./faiss_index:/app/faiss_index
+      - ./logs:/app/logs
     depends_on:
       mongodb:
         condition: service_healthy
@@ -65,6 +79,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 30s
 
   ai_services:
     build:
@@ -72,35 +87,19 @@ services:
       dockerfile: Dockerfile
     container_name: radsight_ai
     restart: unless-stopped
-    env_file:
-      - .env
+    env_file: .env
+    environment:
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      TRANSFORMERS_CACHE: /app/.cache/huggingface
+      HF_HOME: /app/.cache/huggingface
     ports:
       - "8001:8001"
     volumes:
-      - ./ai-services:/app
       - ./uploads:/app/uploads
       - ./faiss_index:/app/faiss_index
-    depends_on:
-      - redis
-    networks:
-      - radsight_net
-    deploy:
-      resources:
-        limits:
-          memory: 4G
-
-  analytics:
-    build:
-      context: ./analytics
-      dockerfile: Dockerfile
-    container_name: radsight_analytics
-    restart: unless-stopped
-    env_file:
-      - .env
-    ports:
-      - "8002:8002"
-    volumes:
-      - ./analytics:/app
+      - ./onnx_models:/app/onnx_models
+      - hf_cache:/app/.cache/huggingface
     depends_on:
       mongodb:
         condition: service_healthy
@@ -108,6 +107,46 @@ services:
         condition: service_healthy
     networks:
       - radsight_net
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 1G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+      start_period: 60s
+
+  analytics:
+    build:
+      context: ./analytics
+      dockerfile: Dockerfile
+    container_name: radsight_analytics
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - radsight_net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
 networks:
   radsight_net:
@@ -116,3 +155,4 @@ networks:
 volumes:
   mongo_data:
   redis_data:
+  hf_cache:
