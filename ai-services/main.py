@@ -49,6 +49,14 @@ async def lifespan(app: FastAPI):
         logger.warning("Sentence-BERT load failed", error=str(e))
 
     try:
+        registry.load_onnx_sessions()
+        cb_ok = registry.ort_clinicalbert is not None
+        sb_ok = registry.ort_sentencebert is not None
+        logger.info("ONNX sessions loaded", clinicalbert=cb_ok, sentencebert=sb_ok)
+    except Exception as e:
+        logger.warning("ONNX session load failed", error=str(e))
+
+    try:
         faiss_manager.initialize()
         logger.info("FAISS index initialized", vectors=faiss_manager.total_vectors)
     except Exception as e:

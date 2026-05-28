@@ -10,12 +10,35 @@ db.createCollection("processing_logs");
 db.createCollection("anomaly_logs");
 db.createCollection("users");
 
-// Compound indexes for query performance
+// Core query indexes
 db.reports.createIndex({ created_at: -1 });
 db.reports.createIndex({ severity: 1, created_at: -1 });
-db.reports.createIndex({ status: 1 });
+db.reports.createIndex({ status: 1, created_at: -1 });
 db.reports.createIndex({ patient_id: 1, created_at: -1 });
 db.reports.createIndex({ report_type: 1, severity: 1 });
+
+// Covers the KPI facet for flagged reports
+db.reports.createIndex({ flagged_for_review: 1, status: 1 });
+
+// Covers classification_confidence $bucket aggregation
+db.reports.createIndex({ classification_confidence: 1 });
+
+// Covers risk score and processing time aggregations
+db.reports.createIndex({ risk_score: 1 });
+db.reports.createIndex({ processing_time_ms: 1 });
+
+// Partial index for completed reports — most analytics filters on this status.
+// Covers (status, severity, created_at) at a fraction of a full-collection index.
+db.reports.createIndex(
+  { status: 1, severity: 1, created_at: -1 },
+  { partialFilterExpression: { status: "completed" } }
+);
+
+// Tags unwind + match for disease prevalence aggregation
+db.reports.createIndex({ tags: 1, created_at: -1 });
+
+// Full-text fallback search on report content
+db.reports.createIndex({ raw_text: "text", ai_summary: "text" }, { default_language: "english" });
 
 db.findings.createIndex({ report_id: 1 });
 db.findings.createIndex({ disease: 1, severity: 1 });

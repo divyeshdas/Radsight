@@ -1,19 +1,18 @@
 import asyncio
 import json
+import time
 from datetime import datetime, timezone
-from typing import Dict, Set
+from typing import Any, Dict, Optional, Set
 from fastapi import WebSocket
 import structlog
 
 logger = structlog.get_logger(__name__)
 
+_KPI_BROADCAST_TTL = 30.0
+_PROC_BROADCAST_TTL = 15.0
+
 
 class ConnectionManager:
-    """
-    Manages active WebSocket connections and broadcasts analytics updates.
-    Clients connect once and receive real-time metric pushes without polling.
-    """
-
     def __init__(self):
         self._connections: Set[WebSocket] = set()
         self._lock = asyncio.Lock()
@@ -38,7 +37,7 @@ class ConnectionManager:
             "timestamp": datetime.now(timezone.utc).isoformat(),
         })
 
-        dead = set()
+        dead: Set[WebSocket] = set()
         async with self._lock:
             connections = set(self._connections)
 
@@ -70,13 +69,51 @@ class ConnectionManager:
 manager = ConnectionManager()
 
 
+class _BroadcastState:
+    """Holds in-memory cached results for the broadcast loop."""
+    kpis: Optional[Dict] = None
+    kpis_ts: float = 0.0
+    processing: Optional[Dict] = None
+    processing_ts: float = 0.0
+
+
+_state = _BroadcastState()
+
+
+async def _get_kpis_cached(db, redis) -> Dict:
+    """Return cached KPIs if fresh, otherwise recompute and update cache."""
+    from analytics.aggregation.aggregator import get_kpi_summary
+    from analytics.core.response_cache import cache_or_compute
+
+    now = time.monotonic()
+    if _state.kpis is not None and (now - _state.kpis_ts) < _KPI_BROADCAST_TTL:
+        return _state.kpis
+
+    result = await cache_or_compute(redis, "analytics:kpi:summary", ttl=30, compute=get_kpi_summary(db))
+    _state.kpis = result
+    _state.kpis_ts = now
+    return result
+
+
+async def _get_processing_cached(db, redis) -> Dict:
+    from analytics.aggregation.aggregator import get_processing_metrics
+    from analytics.core.response_cache import cache_or_compute
+
+    now = time.monotonic()
+    if _state.processing is not None and (now - _state.processing_ts) < _PROC_BROADCAST_TTL:
+        return _state.processing
+
+    result = await cache_or_compute(redis, "analytics:processing:1", ttl=15, compute=get_processing_metrics(db, hours=1))
+    _state.processing = result
+    _state.processing_ts = now
+    return result
+
+
 async def start_broadcast_loop(
-    db,
+    db: Any,
+    redis: Any,
     interval_seconds: int = 5,
 ) -> None:
-    from analytics.aggregation.aggregator import get_kpi_summary, get_processing_metrics
-    from analytics.anomaly.isolation_forest import detect_anomalies
-
     logger.info("WebSocket broadcast loop started", interval=interval_seconds)
     consecutive_errors = 0
 
@@ -87,8 +124,8 @@ async def start_broadcast_loop(
             continue
 
         try:
-            kpis = await get_kpi_summary(db)
-            processing = await get_processing_metrics(db, hours=1)
+            kpis = await _get_kpis_cached(db, redis)
+            processing = await _get_processing_cached(db, redis)
 
             await manager.broadcast({
                 "type": "kpi_update",

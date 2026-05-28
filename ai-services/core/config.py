@@ -31,6 +31,11 @@ class AISettings(BaseSettings):
     faiss_index_path: str = "./faiss_index/radsight.index"
     faiss_dimension: int = 768
 
+    use_onnx: bool = True
+    onnx_cache_dir: str = "./onnx_models"
+    l1_cache_maxsize: int = 512
+    l1_cache_ttl: int = 300
+
     ocr_lang: str = "en"
     ocr_use_gpu: bool = False
 

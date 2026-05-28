@@ -17,6 +17,7 @@ class ModelRegistry:
     """
     Singleton model loader. All transformer models are loaded once at startup
     and reused across requests to avoid repeated initialization overhead.
+    ONNX INT8 sessions are preferred over PyTorch for CPU inference when available.
     """
 
     _instance: Optional["ModelRegistry"] = None
@@ -35,7 +36,34 @@ class ModelRegistry:
         self._clinicalbert_model = None
         self._spacy_nlp = None
         self._sentence_model = None
+        self._ort_clinicalbert = None
+        self._ort_sentencebert = None
+        self._ort_loaded = False
         self._initialized = True
+
+    def load_onnx_sessions(self) -> None:
+        if self._ort_loaded:
+            return
+        self._ort_loaded = True
+
+        if not settings.use_onnx:
+            return
+
+        from optimization.onnx_inference import load_clinicalbert_ort, load_sentencebert_ort
+        self._ort_clinicalbert = load_clinicalbert_ort(
+            settings.onnx_cache_dir, settings.clinicalbert_model
+        )
+        self._ort_sentencebert = load_sentencebert_ort(
+            settings.onnx_cache_dir, settings.sentence_bert_model
+        )
+
+    @property
+    def ort_clinicalbert(self):
+        return self._ort_clinicalbert
+
+    @property
+    def ort_sentencebert(self):
+        return self._ort_sentencebert
 
     def load_biobert(self) -> Any:
         if self._biobert_pipeline is not None:
