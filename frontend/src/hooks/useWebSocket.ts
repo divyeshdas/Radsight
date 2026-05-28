@@ -15,7 +15,7 @@ export function useWebSocket(path: string, options: UseWebSocketOptions = {}) {
   const [status, setStatus] = useState<WSStatus>("disconnected");
   const wsRef = useRef<WebSocket | null>(null);
   const retriesRef = useRef(0);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const connect = useCallback(() => {
     if (typeof window === "undefined") return;

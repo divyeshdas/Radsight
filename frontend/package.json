@@ -10,7 +10,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "next": "15.1.7",
+    "next": "15.3.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "echarts": "5.5.1",
@@ -26,7 +26,7 @@
     "@hookform/resolvers": "3.9.0",
     "react-dropzone": "14.2.9",
     "lucide-react": "0.454.0",
-    "framer-motion": "11.11.7",
+    "framer-motion": "^12.9.4",
     "react-hot-toast": "2.4.1"
   },
   "devDependencies": {
@@ -38,6 +38,6 @@
     "postcss": "8.4.47",
     "autoprefixer": "10.4.20",
     "eslint": "9.13.0",
-    "eslint-config-next": "15.1.7"
+    "eslint-config-next": "15.3.3"
   }
 }

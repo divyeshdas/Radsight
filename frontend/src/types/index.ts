@@ -66,6 +66,8 @@ export interface DashboardKPIs {
   avg_risk_score: number;
   processing_rate: number;
   flagged_for_review: number;
+  avg_processing_ms: number;
+  reports_this_week: number;
 }
 
 export interface AnomalyAlert {
