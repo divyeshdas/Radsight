@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Activity } from "lucide-react";
+import { Stethoscope } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useAuthStore } from "@/store/auth";
@@ -39,61 +39,115 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4"
-      style={{ backgroundColor: "var(--bg-primary)" }}>
+    <div
+      className="min-h-screen flex items-center justify-center p-6"
+      style={{ backgroundColor: "#E6F4EA" }}
+    >
+      <div className="w-full max-w-md">
 
-      <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-9 h-9 rounded-xl bg-accent-blue flex items-center justify-center">
-            <Activity size={18} className="text-white" />
+          <div
+            className="w-11 h-11 rounded-xl flex items-center justify-center shadow-md"
+            style={{ backgroundColor: "#2E7D32" }}
+          >
+            <Stethoscope size={22} className="text-white" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-text-primary">RadSight</h1>
-            <p className="text-xs text-text-muted">AI Radiology Intelligence</p>
+            <h1 className="text-xl font-bold" style={{ color: "#1A1A1A" }}>RadSight</h1>
+            <p className="text-xs font-medium" style={{ color: "#4A6741" }}>
+              Radiology Command Centre
+            </p>
           </div>
         </div>
 
         {/* Card */}
-        <div className="glass-card rounded-2xl p-6">
-          <h2 className="text-sm font-semibold text-text-primary mb-1">Sign in to your workspace</h2>
-          <p className="text-xs text-text-muted mb-6">Enter your credentials to access RadSight</p>
+        <div
+          className="rounded-2xl p-8 shadow-lg"
+          style={{
+            backgroundColor: "#FFFFFF",
+            border: "1px solid #C8E6C9",
+          }}
+        >
+          <h2 className="text-base font-semibold mb-1" style={{ color: "#111111" }}>
+            Sign in to your workspace
+          </h2>
+          <p className="text-sm mb-7" style={{ color: "#555555" }}>
+            Enter your credentials to access RadSight
+          </p>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <Input
-              label="Email address"
-              type="email"
-              placeholder="you@hospital.org"
-              {...register("email")}
-              error={errors.email?.message}
-              autoComplete="email"
-            />
-            <Input
-              label="Password"
-              type="password"
-              placeholder="••••••••"
-              {...register("password")}
-              error={errors.password?.message}
-              autoComplete="current-password"
-            />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium" style={{ color: "#222222" }}>
+                Email address
+              </label>
+              <input
+                type="email"
+                placeholder="you@hospital.org"
+                autoComplete="email"
+                {...register("email")}
+                className="w-full rounded-lg px-3 py-2.5 text-sm outline-none transition-colors"
+                style={{
+                  backgroundColor: "#F7FBF7",
+                  border: "1px solid #A5D6A7",
+                  color: "#111111",
+                }}
+                onFocus={(e) => (e.target.style.borderColor = "#2E7D32")}
+                onBlur={(e) => (e.target.style.borderColor = "#A5D6A7")}
+              />
+              {errors.email && (
+                <p className="text-xs" style={{ color: "#C62828" }}>{errors.email.message}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium" style={{ color: "#222222" }}>
+                Password
+              </label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                autoComplete="current-password"
+                {...register("password")}
+                className="w-full rounded-lg px-3 py-2.5 text-sm outline-none transition-colors"
+                style={{
+                  backgroundColor: "#F7FBF7",
+                  border: "1px solid #A5D6A7",
+                  color: "#111111",
+                }}
+                onFocus={(e) => (e.target.style.borderColor = "#2E7D32")}
+                onBlur={(e) => (e.target.style.borderColor = "#A5D6A7")}
+              />
+              {errors.password && (
+                <p className="text-xs" style={{ color: "#C62828" }}>{errors.password.message}</p>
+              )}
+            </div>
 
             {error && (
-              <p className="text-xs text-rose-400 text-center">{error}</p>
+              <p className="text-sm text-center" style={{ color: "#C62828" }}>{error}</p>
             )}
 
-            <Button type="submit" className="w-full" loading={isSubmitting}>
-              Sign in
-            </Button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity disabled:opacity-60"
+              style={{ backgroundColor: "#2E7D32" }}
+            >
+              {isSubmitting ? "Signing in…" : "Sign in"}
+            </button>
           </form>
 
-          <div className="mt-5 pt-4" style={{ borderTop: "1px solid var(--border-subtle)" }}>
-            <p className="text-[11px] text-text-muted mb-2">Demo credentials</p>
-            <div className="space-y-1 font-mono text-[11px] text-text-muted">
+          <div className="mt-6 pt-5" style={{ borderTop: "1px solid #E8F5E9" }}>
+            <p className="text-xs font-medium mb-2" style={{ color: "#777777" }}>
+              Demo credentials
+            </p>
+            <div className="space-y-1 font-mono text-xs" style={{ color: "#555555" }}>
               <p>admin@radsight.health / RadSight@Admin2024</p>
               <p>radiologist@radsight.health / RadSight@Rad2024</p>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );
