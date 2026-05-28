@@ -6,7 +6,7 @@ const WS_URL = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8002";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [],
+    domains: ["images.unsplash.com"],
   },
   env: {
     NEXT_PUBLIC_API_URL: API_URL,

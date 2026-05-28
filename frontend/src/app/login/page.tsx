@@ -5,9 +5,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import Image from "next/image";
 import { Aperture } from "lucide-react";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
 import { useAuthStore } from "@/store/auth";
 import { login } from "@/lib/auth";
 
@@ -39,11 +38,24 @@ export default function LoginPage() {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center p-6"
-      style={{ backgroundColor: "#E6F4EA" }}
-    >
-      <div className="w-full max-w-md">
+    <div className="relative min-h-screen flex items-center justify-center p-6">
+
+      {/* Background — real MRI suite photograph from Unsplash */}
+      <Image
+        src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1920&auto=format&fit=crop&q=60"
+        alt=""
+        fill
+        className="object-cover object-center"
+        priority
+      />
+
+      {/* Light green wash so the form stays readable */}
+      <div
+        className="absolute inset-0"
+        style={{ backgroundColor: "rgba(220, 242, 224, 0.87)" }}
+      />
+
+      <div className="relative z-10 w-full max-w-md">
 
         {/* Logo */}
         <div className="flex items-center gap-4 mb-10">
