@@ -4,11 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Light teal theme (default) ───────────────────────────────────────────── */
+/* ─── Light mode (MediCare Pro — light sidebar + light content) ─────────────── */
 :root,
 [data-theme="light"] {
   --bg-primary: #EEF9F7;
-  --bg-surface: #F5FFFE;
+  --bg-surface: #FFFFFF;
   --bg-panel: #FFFFFF;
   --bg-elevated: #FFFFFF;
   --border-color: #C8EDE8;
@@ -32,13 +32,19 @@
   --severity-high: #F97316;
   --severity-critical: #EF4444;
 
-  --sidebar-bg: #0D3D38;
-  --sidebar-text-primary: #F0FDFA;
-  --sidebar-text-secondary: rgba(240, 253, 250, 0.65);
-  --sidebar-text-muted: rgba(240, 253, 250, 0.4);
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-item-active: rgba(255, 255, 255, 0.13);
-  --sidebar-item-hover: rgba(255, 255, 255, 0.07);
+  /* Sidebar — light (white bg, dark text) */
+  --sidebar-bg: #FFFFFF;
+  --sidebar-text-primary: #0F2922;
+  --sidebar-text-secondary: #4D7B74;
+  --sidebar-text-muted: #7AADA6;
+  --sidebar-border: #C8EDE8;
+  --sidebar-item-active: #E6F7F4;
+  --sidebar-item-hover: #F0FDFA;
+  --sidebar-active-text: #0F766E;
+  --sidebar-logo-bg: rgba(15, 118, 110, 0.1);
+  --sidebar-logo-icon: #0F766E;
+  --sidebar-avatar-bg: rgba(15, 118, 110, 0.1);
+  --sidebar-avatar-text: #0F766E;
 
   --glass-bg: rgba(240, 253, 250, 0.85);
   --glass-border: rgba(20, 184, 166, 0.2);
@@ -51,29 +57,30 @@
   --card-shadow: 0 1px 3px rgba(15, 118, 110, 0.07), 0 4px 12px rgba(15, 118, 110, 0.04);
 
   --scrollbar-track: #F0FDFA;
-  --scrollbar-thumb: #99F6E4;
+  --scrollbar-thumb: #A7F3D0;
 }
 
-/* ─── Dark theme ────────────────────────────────────────────────────────────── */
+/* ─── Dark mode (WellSpring — dark sidebar + light content) ─────────────────── */
 [data-theme="dark"] {
-  --bg-primary: #061C1A;
-  --bg-surface: #0A2E2B;
-  --bg-panel: #0D3530;
-  --bg-elevated: #134140;
-  --border-color: #1A4E4A;
-  --border-subtle: #133C38;
+  /* Content area stays light — same as light mode */
+  --bg-primary: #EEF9F7;
+  --bg-surface: #FFFFFF;
+  --bg-panel: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --border-color: #C8EDE8;
+  --border-subtle: #DCF5F1;
 
-  --text-primary: #E8FAF7;
-  --text-secondary: #8ECEC8;
-  --text-muted: #5A9E97;
-  --text-inverse: #061C1A;
+  --text-primary: #0F2922;
+  --text-secondary: #3D6B64;
+  --text-muted: #7AADA6;
+  --text-inverse: #F0FDFA;
 
-  --accent-blue: #14B8A6;
-  --accent-cyan: #2DD4BF;
+  --accent-blue: #0F766E;
+  --accent-cyan: #14B8A6;
   --accent-emerald: #22C55E;
   --accent-amber: #F59E0B;
   --accent-rose: #F43F5E;
-  --accent-violet: #A78BFA;
+  --accent-violet: #8B5CF6;
 
   --severity-normal: #22C55E;
   --severity-low: #14B8A6;
@@ -81,26 +88,32 @@
   --severity-high: #F97316;
   --severity-critical: #EF4444;
 
-  --sidebar-bg: #031412;
-  --sidebar-text-primary: #E8FAF7;
-  --sidebar-text-secondary: rgba(232, 250, 247, 0.6);
-  --sidebar-text-muted: rgba(232, 250, 247, 0.38);
-  --sidebar-border: rgba(255, 255, 255, 0.06);
-  --sidebar-item-active: rgba(20, 184, 166, 0.18);
-  --sidebar-item-hover: rgba(20, 184, 166, 0.09);
+  /* Sidebar — dark teal (WellSpring style) */
+  --sidebar-bg: #0D3D38;
+  --sidebar-text-primary: #F0FDFA;
+  --sidebar-text-secondary: rgba(240, 253, 250, 0.65);
+  --sidebar-text-muted: rgba(240, 253, 250, 0.4);
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-item-active: rgba(255, 255, 255, 0.14);
+  --sidebar-item-hover: rgba(255, 255, 255, 0.07);
+  --sidebar-active-text: #A7F3D0;
+  --sidebar-logo-bg: rgba(20, 184, 166, 0.22);
+  --sidebar-logo-icon: #5EEAD4;
+  --sidebar-avatar-bg: rgba(20, 184, 166, 0.2);
+  --sidebar-avatar-text: #5EEAD4;
 
-  --glass-bg: rgba(10, 46, 43, 0.75);
-  --glass-border: rgba(20, 184, 166, 0.25);
-  --card-bg: rgba(13, 53, 48, 0.8);
-  --card-border: rgba(20, 184, 166, 0.18);
+  --glass-bg: rgba(240, 253, 250, 0.85);
+  --glass-border: rgba(20, 184, 166, 0.2);
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-border: rgba(20, 184, 166, 0.15);
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.55);
-  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 1px 2px rgba(15, 118, 110, 0.06);
+  --shadow-md: 0 4px 12px rgba(15, 118, 110, 0.08);
+  --shadow-lg: 0 8px 24px rgba(15, 118, 110, 0.10);
+  --card-shadow: 0 1px 3px rgba(15, 118, 110, 0.07), 0 4px 12px rgba(15, 118, 110, 0.04);
 
-  --scrollbar-track: #061C1A;
-  --scrollbar-thumb: #1A4E4A;
+  --scrollbar-track: #F0FDFA;
+  --scrollbar-thumb: #A7F3D0;
 }
 
 /* ─── Base ──────────────────────────────────────────────────────────────────── */
@@ -211,5 +224,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 .sidebar-item.active {
   background-color: var(--sidebar-item-active);
-  color: var(--sidebar-text-primary);
+  color: var(--sidebar-active-text);
+  font-weight: 600;
 }

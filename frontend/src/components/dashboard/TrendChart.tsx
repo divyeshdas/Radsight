@@ -59,11 +59,21 @@ export function TrendChart({ data, title = "Daily Report Volume" }: TrendChartPr
     series: [
       {
         name: "Reports",
-        type: "bar",
+        type: "line",
         data: totals,
-        barMaxWidth: 8,
-        itemStyle: { color: "#14B8A628", borderRadius: [2, 2, 0, 0] },
-        emphasis: { itemStyle: { color: "#14B8A655" } },
+        smooth: true,
+        symbol: "none",
+        lineStyle: { color: "#14B8A6", width: 2 },
+        itemStyle: { color: "#14B8A6" },
+        areaStyle: {
+          color: {
+            type: "linear", x: 0, y: 0, x2: 0, y2: 1,
+            colorStops: [
+              { offset: 0, color: "#14B8A630" },
+              { offset: 1, color: "#14B8A605" },
+            ],
+          },
+        },
       },
       {
         name: "7-day MA",
@@ -71,9 +81,9 @@ export function TrendChart({ data, title = "Daily Report Volume" }: TrendChartPr
         data: ma,
         smooth: true,
         connectNulls: true,
-        lineStyle: { color: "#14B8A6", width: 2 },
+        lineStyle: { color: "#0F766E", width: 1.5, type: "dashed" },
         symbol: "none",
-        itemStyle: { color: "#14B8A6" },
+        itemStyle: { color: "#0F766E" },
       },
       {
         name: "Critical",

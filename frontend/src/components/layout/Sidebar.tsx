@@ -44,9 +44,9 @@ export function Sidebar() {
       >
         <div
           className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-          style={{ backgroundColor: "rgba(20, 184, 166, 0.25)" }}
+          style={{ backgroundColor: "var(--sidebar-logo-bg)" }}
         >
-          <Activity size={15} style={{ color: "#5EEAD4" }} />
+          <Activity size={15} style={{ color: "var(--sidebar-logo-icon)" }} />
         </div>
         <div>
           <span
@@ -97,8 +97,8 @@ export function Sidebar() {
           <div
             className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
             style={{
-              backgroundColor: "rgba(20, 184, 166, 0.2)",
-              color: "#5EEAD4",
+              backgroundColor: "var(--sidebar-avatar-bg)",
+              color: "var(--sidebar-avatar-text)",
             }}
           >
             {user?.full_name?.[0] ?? "U"}
