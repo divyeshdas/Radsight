@@ -57,6 +57,8 @@ docker/volumes/
 *.pkl
 *.h5
 models/
+!backend/app/models/
+!ai-services/*/models/
 checkpoints/
 faiss_index/
 *.index
