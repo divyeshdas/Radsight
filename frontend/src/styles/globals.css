@@ -59,9 +59,8 @@
   --scrollbar-thumb: #CBD5E1;
 }
 
-/* ─── Dark mode (WellSpring — dark sidebar, white content) ───────────────────── */
+/* ─── Dark mode (dark sidebar, white content) ────────────────────────────────── */
 [data-theme="dark"] {
-  /* Content stays light — same as light mode */
   --bg-primary: #F8FAFC;
   --bg-surface: #FFFFFF;
   --bg-panel: #FFFFFF;
@@ -87,19 +86,18 @@
   --severity-high: #F97316;
   --severity-critical: #EF4444;
 
-  /* Sidebar — dark navy (WellSpring style) */
-  --sidebar-bg: #0B1220;
+  --sidebar-bg: #1E293B;
   --sidebar-text-primary: #F8FAFC;
   --sidebar-text-secondary: rgba(248, 250, 252, 0.6);
   --sidebar-text-muted: rgba(248, 250, 252, 0.38);
   --sidebar-border: rgba(255, 255, 255, 0.07);
-  --sidebar-item-active: rgba(59, 130, 246, 0.2);
-  --sidebar-item-hover: rgba(59, 130, 246, 0.1);
-  --sidebar-active-text: #93C5FD;
-  --sidebar-logo-bg: rgba(59, 130, 246, 0.18);
-  --sidebar-logo-icon: #93C5FD;
-  --sidebar-avatar-bg: rgba(59, 130, 246, 0.18);
-  --sidebar-avatar-text: #93C5FD;
+  --sidebar-item-active: rgba(255, 255, 255, 0.12);
+  --sidebar-item-hover: rgba(255, 255, 255, 0.06);
+  --sidebar-active-text: #FFFFFF;
+  --sidebar-logo-bg: rgba(255, 255, 255, 0.12);
+  --sidebar-logo-icon: #FFFFFF;
+  --sidebar-avatar-bg: rgba(255, 255, 255, 0.12);
+  --sidebar-avatar-text: #FFFFFF;
 
   --glass-bg: rgba(248, 250, 252, 0.9);
   --glass-border: rgba(59, 130, 246, 0.15);
