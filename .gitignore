@@ -56,9 +56,7 @@ docker/volumes/
 *.onnx
 *.pkl
 *.h5
-models/
-!backend/app/models/
-!ai-services/*/models/
+onnx_models/
 checkpoints/
 faiss_index/
 *.index
