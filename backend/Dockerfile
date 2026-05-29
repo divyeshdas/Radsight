@@ -1,4 +1,5 @@
 FROM python:3.11-slim AS builder
+# cache-bust: 2026-05-29
 
 WORKDIR /build
 
