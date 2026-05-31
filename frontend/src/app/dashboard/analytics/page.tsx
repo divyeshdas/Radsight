@@ -380,13 +380,14 @@ function DiseaseTrendCard({ d }: {
   );
 }
 
-// ---------- stat pill ----------
+// ---------- stat card ----------
 
 function StatPill({ label, value, color }: { label: string; value: string | number; color?: string }) {
   return (
-    <div className="flex flex-col gap-0.5 px-3 py-2 rounded-lg" style={{ background: "var(--bg-surface)" }}>
-      <span className="text-[10px] text-text-muted">{label}</span>
-      <span className="text-sm font-bold font-mono" style={{ color: color ?? "var(--text-primary)" }}>
+    <div className="flex flex-col gap-2 px-6 py-5 rounded-xl flex-1 min-w-36"
+      style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)" }}>
+      <span className="text-sm text-text-muted">{label}</span>
+      <span className="text-3xl font-semibold leading-none" style={{ color: color ?? "var(--text-primary)" }}>
         {value}
       </span>
     </div>
@@ -452,9 +453,9 @@ export default function AnalyticsPage() {
           ))}
         </div>
 
-        {/* Processing KPI pills */}
+        {/* Processing KPI cards */}
         {kpis ? (
-          <div className="flex flex-wrap gap-3">
+          <div className="flex gap-4">
             <StatPill label="Total Processed" value={formatNumber(kpis.total_processed)} color="#0EA5E9" />
             <StatPill label="Success Rate" value={`${kpis.success_rate_pct?.toFixed(1)}%`} color="#10B981" />
             <StatPill label="Avg Latency" value={`${kpis.avg_ms?.toFixed(0)}ms`} />
@@ -462,9 +463,9 @@ export default function AnalyticsPage() {
             <StatPill label="Failures" value={formatNumber(kpis.failure_count)} color="#EF4444" />
           </div>
         ) : (
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="h-12 w-28 rounded-lg" />
+              <Skeleton key={i} className="h-24 flex-1 rounded-xl" />
             ))}
           </div>
         )}
