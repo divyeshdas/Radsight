@@ -1,26 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import { Navbar } from "@/components/layout/Navbar";
 import { ReportTable } from "@/components/reports/ReportTable";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { api } from "@/lib/api";
-import { Search, Filter, Upload, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import type { RadiologyReport, PaginatedResponse } from "@/types";
 
 const fetcher = (url: string) => api.get(url).then((r) => r.data);
 
-const SEVERITY_OPTIONS = ["", "normal", "mild", "moderate", "severe", "critical"];
+const SEVERITY_OPTIONS = ["", "normal", "low", "moderate", "high", "critical"];
 const STATUS_OPTIONS = ["", "pending", "processing", "completed", "failed"];
 
 export default function ReportsPage() {
+  const searchParams = useSearchParams();
   const [page, setPage] = useState(1);
   const [severity, setSeverity] = useState("");
   const [status, setStatus] = useState("");
-  const [patient, setPatient] = useState("");
+  const [patient, setPatient] = useState(searchParams.get("patient_id") ?? "");
   const [flagged, setFlagged] = useState(false);
+
+  useEffect(() => {
+    const pid = searchParams.get("patient_id");
+    if (pid) setPatient(pid);
+  }, [searchParams]);
 
   const params = new URLSearchParams({ page: String(page), page_size: "20" });
   if (severity) params.set("severity", severity);

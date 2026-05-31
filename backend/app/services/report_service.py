@@ -94,7 +94,7 @@ async def list_reports(
 
     query: dict = {}
     if patient_id:
-        query["patient_id"] = patient_id
+        query["patient_id"] = {"$regex": patient_id.strip(), "$options": "i"}
     if severity:
         query["severity"] = severity
     if status:

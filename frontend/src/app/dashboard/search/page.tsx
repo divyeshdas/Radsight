@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { api } from "@/lib/api";
-import { Search, Zap, Clock, BarChart2 } from "lucide-react";
+import { Search, Zap, Clock, BarChart2, FileText } from "lucide-react";
 import { formatDateTime, severityColor, truncate } from "@/lib/utils";
 import type { SearchResult } from "@/types";
 
@@ -19,6 +20,7 @@ const EXAMPLE_QUERIES = [
 ];
 
 export default function SearchPage() {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [meta, setMeta] = useState<{ inference_ms: number; total: number; cache_hit_rate_pct?: number } | null>(null);
@@ -118,11 +120,21 @@ export default function SearchPage() {
                     </p>
                     <p className="text-[10px] text-text-muted mt-2">{formatDateTime(r.created_at)}</p>
                   </div>
-                  <div className="text-right shrink-0">
-                    <div className="text-xs font-mono font-bold" style={{ color: severityColor(r.severity) }}>
-                      {(r.score * 100).toFixed(1)}%
+                  <div className="flex flex-col items-end gap-2 shrink-0">
+                    <div className="text-right">
+                      <div className="text-xs font-mono font-bold" style={{ color: severityColor(r.severity) }}>
+                        {(r.score * 100).toFixed(1)}%
+                      </div>
+                      <div className="text-[10px] text-text-muted">similarity</div>
                     </div>
-                    <div className="text-[10px] text-text-muted">similarity</div>
+                    <button
+                      onClick={() => router.push(`/dashboard/reports?patient_id=${encodeURIComponent(r.patient_id)}`)}
+                      className="flex items-center gap-1 text-[10px] px-2 py-1 rounded-md text-text-muted hover:text-accent-blue transition-colors"
+                      style={{ border: "1px solid var(--border-subtle)" }}
+                    >
+                      <FileText size={10} />
+                      View in Reports
+                    </button>
                   </div>
                 </div>
               </Card>
