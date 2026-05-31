@@ -385,7 +385,7 @@ function DiseaseTrendCard({ d }: {
 function StatPill({ label, value, color }: { label: string; value: string | number; color?: string }) {
   return (
     <div className="flex flex-col gap-0.5 px-3 py-2 rounded-lg" style={{ background: "var(--bg-surface)" }}>
-      <span className="text-[10px] uppercase tracking-wider text-text-muted">{label}</span>
+      <span className="text-[10px] text-text-muted">{label}</span>
       <span className="text-sm font-bold font-mono" style={{ color: color ?? "var(--text-primary)" }}>
         {value}
       </span>
@@ -431,7 +431,7 @@ export default function AnalyticsPage() {
 
   return (
     <div className="flex flex-col flex-1">
-      <Navbar title="Analytics" subtitle="Deep-dive into trends, forecasts, and anomalies" />
+      <Navbar title="Analytics" subtitle="Report trends, forecasts, and system performance" />
 
       <div className="flex-1 p-6 space-y-6 max-w-screen-2xl mx-auto w-full">
 
@@ -475,7 +475,7 @@ export default function AnalyticsPage() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Activity size={13} className="text-accent-blue" />
-                <span className="text-sm font-semibold text-text-primary">Report Volume</span>
+                <span className="text-sm font-medium text-text-primary">Report Volume</span>
               </div>
               <span className="text-[10px] text-text-muted font-mono">{days}-day window</span>
             </div>
@@ -491,7 +491,7 @@ export default function AnalyticsPage() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <TrendingUp size={13} className="text-accent-violet" />
-                <span className="text-sm font-semibold text-text-primary">Prophet Forecast</span>
+                <span className="text-sm font-medium text-text-primary">Volume Forecast</span>
               </div>
               <span className="text-[10px] text-text-muted font-mono">+{forecastPeriods} days</span>
             </div>
@@ -510,7 +510,7 @@ export default function AnalyticsPage() {
             <Card glass>
               <div className="flex items-center gap-2 mb-4">
                 <Zap size={13} className="text-amber-400" />
-                <span className="text-sm font-semibold text-text-primary">Disease Prevalence</span>
+                <span className="text-sm font-medium text-text-primary">Disease Prevalence</span>
               </div>
               {diseasesLoading
                 ? <Skeleton className="h-[300px] w-full rounded-lg" />
@@ -524,7 +524,7 @@ export default function AnalyticsPage() {
           <Card glass>
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp size={13} className="text-emerald-400" />
-              <span className="text-sm font-semibold text-text-primary">Disease Trends</span>
+              <span className="text-sm font-medium text-text-primary">Disease Trends</span>
             </div>
             {trendsLoading
               ? <div className="space-y-2">{Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-10 rounded" />)}</div>
@@ -542,7 +542,7 @@ export default function AnalyticsPage() {
           <Card glass>
             <div className="flex items-center gap-2 mb-4">
               <Cpu size={13} className="text-violet-400" />
-              <span className="text-sm font-semibold text-text-primary">AI Confidence Distribution</span>
+              <span className="text-sm font-medium text-text-primary">Confidence Distribution</span>
             </div>
             {confLoading
               ? <Skeleton className="h-[200px] w-full rounded-lg" />
@@ -555,7 +555,7 @@ export default function AnalyticsPage() {
           <Card glass>
             <div className="flex items-center gap-2 mb-4">
               <Activity size={13} className="text-sky-400" />
-              <span className="text-sm font-semibold text-text-primary">Processing Latency</span>
+              <span className="text-sm font-medium text-text-primary">Processing Latency</span>
             </div>
             {procLoading
               ? <Skeleton className="h-[200px] w-full rounded-lg" />
@@ -571,7 +571,7 @@ export default function AnalyticsPage() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <AlertTriangle size={13} className="text-rose-400" />
-              <span className="text-sm font-semibold text-text-primary">Anomaly Log</span>
+              <span className="text-sm font-medium text-text-primary">Anomaly Log</span>
             </div>
             {!anomalyLoading && (
               <span className="text-[10px] text-text-muted font-mono">
