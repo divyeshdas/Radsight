@@ -58,7 +58,7 @@ _VISION_PROMPT = (
     '"confidence":0.0}'
 )
 
-_GEMINI_MODEL = "gemini-2.0-flash"
+_GROQ_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct"
 
 
 def extract_text_from_pdf(content: bytes) -> str:
@@ -205,36 +205,37 @@ def _demo_image_analysis(filename: str) -> dict:
     }
 
 
-def _analyze_image_with_gemini(content: bytes, ext: str) -> dict:
-    from google import genai
-    from google.genai import types
+def _analyze_image_with_groq(content: bytes, ext: str) -> dict:
+    import base64
+    from groq import Groq
 
     media_type = _IMAGE_MEDIA_TYPES.get(ext, "image/jpeg")
-    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+    b64 = base64.standard_b64encode(content).decode("utf-8")
+    client = Groq(api_key=os.environ["GROQ_API_KEY"])
 
-    last_err = None
-    for attempt in range(3):
-        try:
-            response = client.models.generate_content(
-                model=_GEMINI_MODEL,
-                contents=[
-                    types.Part.from_bytes(data=content, mime_type=media_type),
-                    _VISION_PROMPT,
-                ],
-            )
-            raw = response.text.strip()
-            if "```" in raw:
-                raw = raw.split("```")[1]
-                if raw.startswith("json"):
-                    raw = raw[4:]
-                raw = raw.split("```")[0].strip()
-            return json.loads(raw)
-        except Exception as e:
-            last_err = e
-            if attempt < 2:
-                time.sleep(5 * (attempt + 1))  # 5s, 10s backoff
+    response = client.chat.completions.create(
+        model=_GROQ_MODEL,
+        messages=[{
+            "role": "user",
+            "content": [
+                {
+                    "type": "image_url",
+                    "image_url": {"url": f"data:{media_type};base64,{b64}"},
+                },
+                {"type": "text", "text": _VISION_PROMPT},
+            ],
+        }],
+        max_tokens=512,
+    )
 
-    raise last_err
+    raw = response.choices[0].message.content.strip()
+    if "```" in raw:
+        raw = raw.split("```")[1]
+        if raw.startswith("json"):
+            raw = raw[4:]
+        raw = raw.split("```")[0].strip()
+
+    return json.loads(raw)
 
 
 def process_upload(content: bytes, ext: str, filename: str = "") -> dict:
@@ -253,9 +254,9 @@ def process_upload(content: bytes, ext: str, filename: str = "") -> dict:
         result["raw_text"] = text[:500] if text else f"[TXT: {filename}]"
 
     elif ext in _IMAGE_MEDIA_TYPES:
-        if os.environ.get("GEMINI_API_KEY"):
+        if os.environ.get("GROQ_API_KEY"):
             try:
-                data = _analyze_image_with_gemini(content, ext)
+                data = _analyze_image_with_groq(content, ext)
                 severity = data.get("severity", "normal")
                 risk = round(min(0.99, max(0.01, float(data.get("risk_score", 0.1)))), 4)
                 confidence = round(min(0.99, max(0.5, float(data.get("confidence", 0.85)))), 4)
