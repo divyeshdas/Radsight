@@ -40,27 +40,27 @@ export function Sidebar() {
     >
       {/* Logo */}
       <div
-        className="h-16 flex items-center px-5 gap-3"
+        className="h-20 flex items-center px-5 gap-4"
         style={{ borderBottom: "1px solid var(--sidebar-border)" }}
       >
         <div
-          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+          className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
           style={{ backgroundColor: "var(--sidebar-logo-bg)" }}
         >
-          <Activity size={15} style={{ color: "var(--sidebar-logo-icon)" }} />
+          <Activity size={22} style={{ color: "var(--sidebar-logo-icon)" }} />
         </div>
         <div>
           <span
-            className="text-sm font-bold tracking-wide"
+            className="text-lg font-bold tracking-wide"
             style={{ color: "var(--sidebar-text-primary)" }}
           >
             RadSight
           </span>
           <span
-            className="block text-[10px] font-mono"
+            className="block text-xs"
             style={{ color: "var(--sidebar-text-muted)" }}
           >
-            v1.0 · AI Platform
+            v1.0 · Radiology Platform
           </span>
         </div>
       </div>
@@ -91,12 +91,13 @@ export function Sidebar() {
 
       {/* User section */}
       <div
-        className="px-3 py-4 space-y-0.5"
+        className="px-3 py-5 space-y-1"
         style={{ borderTop: "1px solid var(--sidebar-border)" }}
       >
-        <div className="flex items-center gap-3 px-3 py-2 mb-1">
+        <div className="flex items-center gap-3 px-3 py-2.5 mb-1 rounded-lg"
+          style={{ background: "var(--sidebar-item-active-bg, rgba(255,255,255,0.06))" }}>
           <div
-            className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
             style={{
               backgroundColor: "var(--sidebar-avatar-bg)",
               color: "var(--sidebar-avatar-text)",
@@ -106,13 +107,13 @@ export function Sidebar() {
           </div>
           <div className="flex-1 min-w-0">
             <p
-              className="text-xs font-medium truncate"
+              className="text-sm font-semibold truncate"
               style={{ color: "var(--sidebar-text-primary)" }}
             >
               {user?.full_name ?? "User"}
             </p>
             <p
-              className="text-[10px] capitalize"
+              className="text-xs capitalize mt-0.5"
               style={{ color: "var(--sidebar-text-muted)" }}
             >
               {user?.role ?? "—"}
@@ -123,8 +124,8 @@ export function Sidebar() {
           onClick={handleLogout}
           className="sidebar-item w-full hover:!text-rose-400 hover:!bg-rose-400/10"
         >
-          <LogOut size={14} />
-          <span>Sign out</span>
+          <LogOut size={15} />
+          <span className="text-sm">Sign out</span>
         </button>
       </div>
     </aside>
