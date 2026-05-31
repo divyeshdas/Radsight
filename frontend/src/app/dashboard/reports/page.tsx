@@ -8,7 +8,7 @@ import { ReportTable } from "@/components/reports/ReportTable";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { api } from "@/lib/api";
-import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Filter, ChevronLeft, ChevronRight, AlertTriangle } from "lucide-react";
 import type { RadiologyReport, PaginatedResponse } from "@/types";
 
 const fetcher = (url: string) => api.get(url).then((r) => r.data);
@@ -35,7 +35,7 @@ export default function ReportsPage() {
   if (patient) params.set("patient_id", patient);
   if (flagged) params.set("flagged", "true");
 
-  const { data, isLoading } = useSWR<PaginatedResponse<RadiologyReport>>(
+  const { data, isLoading, error } = useSWR<PaginatedResponse<RadiologyReport>>(
     `/reports/?${params}`, fetcher, { keepPreviousData: true }
   );
 
@@ -86,22 +86,34 @@ export default function ReportsPage() {
           </Button>
         </div>
 
+        {/* Error state */}
+        {error && (
+          <div className="flex items-center gap-2 rounded-lg p-3" style={{ background: "#EF444410", border: "1px solid #EF444430" }}>
+            <AlertTriangle size={14} style={{ color: "#EF4444" }} />
+            <p className="text-sm text-red-400">
+              Failed to load reports: {error?.response?.data?.detail ?? error?.message ?? "Unknown error"}
+            </p>
+          </div>
+        )}
+
         {/* Table */}
         <ReportTable reports={data?.items ?? []} isLoading={isLoading} />
 
-        {/* Pagination */}
-        {data && data.pages > 1 && (
+        {/* Row count + pagination */}
+        {data && !error && (
           <div className="flex items-center justify-between text-xs text-text-muted">
-            <span>{data.total.toLocaleString()} total reports</span>
-            <div className="flex items-center gap-2">
-              <Button variant="secondary" size="sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
-                <ChevronLeft size={13} />
-              </Button>
-              <span className="font-mono">Page {page} of {data.pages}</span>
-              <Button variant="secondary" size="sm" disabled={page >= data.pages} onClick={() => setPage(p => p + 1)}>
-                <ChevronRight size={13} />
-              </Button>
-            </div>
+            <span>{data.total.toLocaleString()} report{data.total !== 1 ? "s" : ""} found</span>
+            {data.pages > 1 && (
+              <div className="flex items-center gap-2">
+                <Button variant="secondary" size="sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
+                  <ChevronLeft size={13} />
+                </Button>
+                <span className="font-mono">Page {page} of {data.pages}</span>
+                <Button variant="secondary" size="sm" disabled={page >= data.pages} onClick={() => setPage(p => p + 1)}>
+                  <ChevronRight size={13} />
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>
