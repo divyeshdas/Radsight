@@ -104,10 +104,10 @@
   --sidebar-avatar-bg: rgba(255, 255, 255, 0.16);
   --sidebar-avatar-text: #FFFFFF;
 
-  --navbar-bg: #5BBABA;
-  --navbar-border: rgba(255, 255, 255, 0.15);
+  --navbar-bg: #3D8B8B;
+  --navbar-border: rgba(255, 255, 255, 0.12);
   --navbar-text-primary: #FFFFFF;
-  --navbar-text-muted: rgba(255, 255, 255, 0.65);
+  --navbar-text-muted: rgba(255, 255, 255, 0.55);
 
   --glass-bg: rgba(248, 250, 252, 0.9);
   --glass-border: rgba(59, 130, 246, 0.15);
