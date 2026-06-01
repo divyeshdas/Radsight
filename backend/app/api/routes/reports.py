@@ -58,13 +58,20 @@ async def upload_report(
 
 @router.post("/ingest", response_model=RadiologyReport, status_code=201)
 async def ingest_text_report(
-    background_tasks: BackgroundTasks,
     current_user: CurrentUser,
     patient_id: str,
     raw_text: str,
     report_type: ReportType = ReportType.chest_xray,
     institution: Optional[str] = None,
 ):
+    from app.services.scan_processor import analyze_text
+    import time
+    start = time.monotonic()
+    analysis = analyze_text(raw_text)
+    analysis["processing_time_ms"] = round((time.monotonic() - start) * 1000, 1)
+    analysis["status"] = "completed"
+    analysis["cleaned_text"] = raw_text[:5000]
+
     report = await create_report(
         patient_id=patient_id,
         raw_text=raw_text,
@@ -72,8 +79,8 @@ async def ingest_text_report(
         source="api",
         institution=institution,
         radiologist_id=str(current_user.id),
+        analysis=analysis,
     )
-    background_tasks.add_task(_trigger_nlp_processing, str(report.id))
     return report
 
 
