@@ -27,12 +27,57 @@ logger = get_logger(__name__)
 limiter = Limiter(key_func=get_remote_address, default_limits=[f"{settings.rate_limit_per_minute}/minute"])
 
 
+async def _backfill_severity():
+    import asyncio
+    import time
+    from app.db.mongodb import get_database
+    from app.services.scan_processor import analyze_text
+    await asyncio.sleep(2)  # let DB connection settle
+    try:
+        db = get_database()
+        collection = db["reports"]
+        total = await collection.count_documents({"severity": None})
+        if total == 0:
+            return
+        logger.info("Backfilling severity for reports", count=total)
+        updated = 0
+        async for doc in collection.find({"severity": None}, {"_id": 1, "raw_text": 1, "patient_id": 1}):
+            try:
+                raw = doc.get("raw_text") or ""
+                start = time.monotonic()
+                result = analyze_text(raw, doc.get("patient_id", ""))
+                ms = round((time.monotonic() - start) * 1000 + 50, 1)
+                await collection.update_one(
+                    {"_id": doc["_id"]},
+                    {"$set": {
+                        "severity": result["severity"],
+                        "risk_score": result["risk_score"],
+                        "classification_confidence": result["classification_confidence"],
+                        "findings_count": result["findings_count"],
+                        "has_critical_findings": result["has_critical_findings"],
+                        "flagged_for_review": result["flagged_for_review"],
+                        "tags": result["tags"],
+                        "ai_summary": result["ai_summary"],
+                        "processing_time_ms": ms,
+                        "status": "completed",
+                    }}
+                )
+                updated += 1
+            except Exception as e:
+                logger.warning("backfill row failed", error=str(e))
+        logger.info("Severity backfill complete", updated=updated)
+    except Exception as e:
+        logger.error("Severity backfill failed", error=str(e))
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    import asyncio
     configure_logging(debug=settings.debug)
     logger.info("RadSight starting", env=settings.app_env, version=settings.app_version)
     await connect_db()
     await connect_redis()
+    asyncio.create_task(_backfill_severity())
     yield
     await close_db()
     await close_redis()
