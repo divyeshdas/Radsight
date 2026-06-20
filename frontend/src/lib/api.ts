@@ -20,9 +20,12 @@ api.interceptors.response.use(
   (res) => res,
   async (error: AxiosError) => {
     const status = error.response?.status;
-    if (status === 401 || status === 403) {
+    const url = error.config?.url || "";
+    const isAuthRoute = url.includes("/auth/login") || url.includes("/auth/register");
+
+    if ((status === 401 || status === 403) && !isAuthRoute) {
       const refresh = typeof window !== "undefined" ? localStorage.getItem("radsight_refresh_token") : null;
-      if (refresh && !error.config?.url?.includes("/auth/refresh")) {
+      if (refresh && !url.includes("/auth/refresh")) {
         try {
           const res = await axios.post(`${BASE_URL}/api/v1/auth/refresh`, { refresh_token: refresh });
           const { access_token, refresh_token } = res.data;
