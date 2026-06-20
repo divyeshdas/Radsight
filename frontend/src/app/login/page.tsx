@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Image from "next/image";
-import { Aperture, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useAuthStore } from "@/store/auth";
 import { login } from "@/lib/auth";
 
@@ -91,19 +91,15 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-md">
 
         {/* Logo */}
-        <div className="flex items-center gap-4 mb-6">
-          <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-md"
-            style={{ backgroundColor: "#2E7D32" }}
-          >
-            <Aperture size={30} className="text-white" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#1A1A1A" }}>RadSight</h1>
-            <p className="text-sm font-medium mt-0.5" style={{ color: "#4A6741" }}>
-              Radiology Command Centre
-            </p>
-          </div>
+        <div className="mb-6">
+          <Image
+            src="/radsight-logo.png"
+            alt="RadSight — Radiology Intelligence"
+            width={320}
+            height={90}
+            className="object-contain"
+            priority
+          />
         </div>
 
         {/* Marquee */}

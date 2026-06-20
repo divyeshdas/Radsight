@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import {
   LayoutDashboard, FileText, Search, BarChart3,
-  Activity, LogOut, ChevronRight, FileScan,
+  LogOut, ChevronRight, FileScan,
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth";
 import { logout } from "@/lib/auth";
@@ -40,29 +41,18 @@ export function Sidebar() {
     >
       {/* Logo */}
       <div
-        className="h-20 flex items-center px-5 gap-4"
+        className="h-20 flex items-center justify-center px-4"
         style={{ borderBottom: "1px solid var(--sidebar-border)" }}
       >
-        <div
-          className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
-          style={{ backgroundColor: "var(--sidebar-logo-bg)" }}
-        >
-          <Activity size={22} style={{ color: "var(--sidebar-logo-icon)" }} />
-        </div>
-        <div>
-          <span
-            className="text-lg font-bold tracking-wide"
-            style={{ color: "var(--sidebar-text-primary)" }}
-          >
-            RadSight
-          </span>
-          <span
-            className="block text-xs"
-            style={{ color: "var(--sidebar-text-muted)" }}
-          >
-            v1.0 · Radiology Platform
-          </span>
-        </div>
+        <Image
+          src="/radsight-logo.png"
+          alt="RadSight"
+          width={200}
+          height={56}
+          className="object-contain"
+          style={{ mixBlendMode: "screen" }}
+          priority
+        />
       </div>
 
       {/* Navigation */}
