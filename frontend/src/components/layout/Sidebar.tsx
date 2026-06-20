@@ -47,8 +47,8 @@ export function Sidebar() {
         <Image
           src="/radsight-logo.png"
           alt="RadSight"
-          width={130}
-          height={36}
+          width={110}
+          height={30}
           className="object-contain"
           priority
         />
