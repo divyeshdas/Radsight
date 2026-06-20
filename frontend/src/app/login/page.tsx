@@ -93,7 +93,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="mb-6">
           <Image
-            src="/radsight-logo.png"
+            src="/radsight-logo-color.png"
             alt="RadSight — Radiology Intelligence"
             width={320}
             height={90}
