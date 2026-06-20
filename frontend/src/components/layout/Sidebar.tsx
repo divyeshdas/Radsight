@@ -41,16 +41,15 @@ export function Sidebar() {
     >
       {/* Logo */}
       <div
-        className="h-20 flex items-center justify-center px-4"
+        className="h-16 flex items-center justify-center px-4"
         style={{ borderBottom: "1px solid var(--sidebar-border)" }}
       >
         <Image
           src="/radsight-logo.png"
           alt="RadSight"
-          width={200}
-          height={56}
+          width={160}
+          height={44}
           className="object-contain"
-          style={{ mixBlendMode: "screen" }}
           priority
         />
       </div>
