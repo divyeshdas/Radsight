@@ -69,11 +69,15 @@ class Settings(BaseSettings):
     rate_limit_burst: int = 20
 
     # CORS
-    cors_origins: str = "http://localhost:3000,https://radsight.vercel.app"
+    cors_origins: str = "http://localhost:3000"
+    frontend_url: str = "https://radsight.vercel.app"
 
     @property
     def cors_origins_list(self) -> List[str]:
-        return [o.strip() for o in self.cors_origins.split(",")]
+        origins = {o.strip() for o in self.cors_origins.split(",") if o.strip()}
+        if self.frontend_url:
+            origins.add(self.frontend_url.strip())
+        return list(origins)
 
     @property
     def allowed_extensions_list(self) -> List[str]:
