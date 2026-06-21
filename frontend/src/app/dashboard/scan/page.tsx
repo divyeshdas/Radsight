@@ -96,7 +96,7 @@ function ResultPanel({ result }: { result: ScanResult }) {
       <div className="grid grid-cols-3 gap-3">
         {[
           {
-            icon: Brain,
+            icon: CheckCircle2,
             label: "Confidence",
             value: result.classification_confidence != null
               ? `${(result.classification_confidence * 100).toFixed(1)}%`
