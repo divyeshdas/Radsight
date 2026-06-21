@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +9,7 @@ import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
 import { useAuthStore } from "@/store/auth";
 import { login } from "@/lib/auth";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 const schema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -39,6 +40,11 @@ export default function LoginPage() {
   const { setUser } = useAuthStore();
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [backendReady, setBackendReady] = useState(false);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/health`).then(() => setBackendReady(true)).catch(() => {});
+  }, []);
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginForm>({
     resolver: zodResolver(schema),
@@ -209,7 +215,9 @@ export default function LoginPage() {
               className="w-full py-3 rounded-lg text-base font-semibold text-white transition-opacity disabled:opacity-60"
               style={{ backgroundColor: "#2E7D32" }}
             >
-              {isSubmitting ? "Signing in…" : "Sign in"}
+              {isSubmitting
+                ? backendReady ? "Signing in…" : "Waking up server… hang tight"
+                : "Sign in"}
             </button>
           </form>
 
@@ -217,7 +225,7 @@ export default function LoginPage() {
             <p className="text-sm font-medium mb-2.5" style={{ color: "#777777" }}>
               Demo credentials
             </p>
-            <div className="space-y-1.5 font-mono text-sm" style={{ color: "#555555" }}>
+            <div className="space-y-1.5 text-sm" style={{ color: "#555555" }}>
               <p>admin@radsight.health / RadSight@Admin2024</p>
               <p>radiologist@radsight.health / RadSight@Rad2024</p>
             </div>
