@@ -80,7 +80,7 @@ export default function SearchPage() {
         {/* Meta */}
         {meta && (
           <div className="flex items-center gap-6 text-sm text-text-muted">
-            <span className="flex items-center gap-1.5"><Clock size={13} />{meta.inference_ms.toFixed(0)}ms</span>
+            <span className="flex items-center gap-1.5"><Clock size={13} />{Math.round(meta.inference_ms)}ms</span>
             <span className="flex items-center gap-1.5"><BarChart2 size={13} />{meta.total} results</span>
             {meta.cache_hit_rate_pct != null && (
               <span>cache hit: {meta.cache_hit_rate_pct}%</span>
@@ -110,7 +110,7 @@ export default function SearchPage() {
                 <div className="flex items-start justify-between gap-6 py-1">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="text-sm font-mono text-text-muted">{r.patient_id}</span>
+                      <span className="text-sm font-medium text-text-primary">{r.patient_id}</span>
                       {r.severity && (
                         <Badge variant="severity" severity={r.severity}
                           label={r.severity.charAt(0).toUpperCase() + r.severity.slice(1)} />
@@ -124,7 +124,7 @@ export default function SearchPage() {
                   <div className="flex flex-col items-end gap-3 shrink-0">
                     <div className="text-right">
                       <div className="text-lg font-semibold" style={{ color: severityColor(r.severity) }}>
-                        {(r.score * 100).toFixed(1)}%
+                        {Math.round(r.score * 100)}%
                       </div>
                       <div className="text-xs text-text-muted">similarity</div>
                     </div>
