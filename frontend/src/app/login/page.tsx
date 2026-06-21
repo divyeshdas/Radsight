@@ -94,12 +94,18 @@ export default function LoginPage() {
         <div className="mb-6">
           <Image
             src="/radsight-logo-color.png"
-            alt="RadSight — Radiology Intelligence"
+            alt="RadSight"
             width={320}
             height={90}
             className="object-contain"
             priority
           />
+          <p
+            className="text-sm font-medium tracking-[0.25em] mt-1"
+            style={{ color: "#2E5E31" }}
+          >
+            RADIOLOGY INTELLIGENCE
+          </p>
         </div>
 
         {/* Marquee */}
