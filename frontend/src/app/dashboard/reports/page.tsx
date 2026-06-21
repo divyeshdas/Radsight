@@ -172,11 +172,11 @@ export default function ReportsPage() {
         {/* Table */}
         <div className="panel rounded-xl overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-xs">
+            <table className="w-full text-sm">
               <thead>
                 <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
                   {["Patient", "Type", "Severity", "Risk", "Confidence", "Date", "Status", ""].map((col) => (
-                    <th key={col} className="px-4 py-3 text-left font-medium text-text-muted uppercase tracking-wider whitespace-nowrap">
+                    <th key={col} className="px-4 py-3 text-left text-xs font-medium text-text-muted whitespace-nowrap">
                       {col}
                     </th>
                   ))}
@@ -195,8 +195,8 @@ export default function ReportsPage() {
 
                 {!loading && (data?.items ?? []).map((r) => (
                   <tr key={r.id} className="transition-colors">
-                    <td className="px-4 py-3 font-mono text-text-primary">{r.patient_id}</td>
-                    <td className="px-4 py-3 text-text-secondary">{(r.report_type || "").replace(/_/g, " ")}</td>
+                    <td className="px-4 py-3 font-medium text-text-primary">{r.patient_id}</td>
+                    <td className="px-4 py-3 text-text-secondary capitalize">{(r.report_type || "").replace(/_/g, " ")}</td>
                     <td className="px-4 py-3">
                       {r.severity
                         ? <Badge variant="severity" severity={r.severity} label={r.severity.charAt(0).toUpperCase() + r.severity.slice(1)} />
@@ -209,13 +209,13 @@ export default function ReportsPage() {
                             <div className="w-14 h-1.5 rounded-full overflow-hidden" style={{ background: "var(--bg-surface)" }}>
                               <div className="h-full rounded-full" style={{ width: `${r.risk_score * 100}%`, backgroundColor: severityColor(r.severity) }} />
                             </div>
-                            <span className="font-mono text-text-secondary">{(r.risk_score * 100).toFixed(0)}%</span>
+                            <span className="text-text-secondary">{(r.risk_score * 100).toFixed(0)}%</span>
                           </div>
                         )
                         : <span className="text-text-muted">—</span>}
                     </td>
-                    <td className="px-4 py-3 font-mono text-text-secondary">
-                      {r.classification_confidence != null ? `${(r.classification_confidence * 100).toFixed(1)}%` : "—"}
+                    <td className="px-4 py-3 text-text-secondary">
+                      {r.classification_confidence != null ? `${Math.round(r.classification_confidence * 100)}%` : "—"}
                     </td>
                     <td className="px-4 py-3 text-text-muted whitespace-nowrap">
                       {r.created_at ? formatDateTime(r.created_at) : "—"}
@@ -257,7 +257,7 @@ export default function ReportsPage() {
                 <Button variant="secondary" size="sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
                   <ChevronLeft size={13} />
                 </Button>
-                <span className="font-mono">Page {page} of {data.pages}</span>
+                <span>Page {page} of {data.pages}</span>
                 <Button variant="secondary" size="sm" disabled={page >= data.pages} onClick={() => setPage(p => p + 1)}>
                   <ChevronRight size={13} />
                 </Button>

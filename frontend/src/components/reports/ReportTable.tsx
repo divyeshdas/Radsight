@@ -30,11 +30,11 @@ export function ReportTable({ reports, onSelect, isLoading }: ReportTableProps) 
   return (
     <div className="panel rounded-xl overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-xs">
+        <table className="w-full text-sm">
           <thead>
             <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
               {COLS.map((col) => (
-                <th key={col} className="px-4 py-3 text-left font-medium text-text-muted uppercase tracking-wider whitespace-nowrap">
+                <th key={col} className="px-4 py-3 text-left text-xs font-medium text-text-muted whitespace-nowrap">
                   {col}
                 </th>
               ))}
@@ -48,8 +48,8 @@ export function ReportTable({ reports, onSelect, isLoading }: ReportTableProps) 
                   "transition-colors",
                   onSelect && "cursor-pointer hover:bg-surface/60"
                 )}>
-                <td className="px-4 py-3 font-mono text-text-primary">{r.patient_id}</td>
-                <td className="px-4 py-3 text-text-secondary">{r.report_type.replace(/_/g, " ")}</td>
+                <td className="px-4 py-3 font-medium text-text-primary">{r.patient_id}</td>
+                <td className="px-4 py-3 text-text-secondary capitalize">{r.report_type.replace(/_/g, " ")}</td>
                 <td className="px-4 py-3">
                   {r.severity
                     ? <Badge variant="severity" severity={r.severity} label={r.severity.charAt(0).toUpperCase() + r.severity.slice(1)} />
@@ -62,13 +62,13 @@ export function ReportTable({ reports, onSelect, isLoading }: ReportTableProps) 
                           <div className="h-full rounded-full transition-all"
                             style={{ width: `${r.risk_score * 100}%`, backgroundColor: severityColor(r.severity ?? "") }} />
                         </div>
-                        <span className="font-mono text-text-secondary">{(r.risk_score * 100).toFixed(0)}%</span>
+                        <span className="text-text-secondary">{(r.risk_score * 100).toFixed(0)}%</span>
                       </div>
                     : <span className="text-text-muted">—</span>}
                 </td>
-                <td className="px-4 py-3 font-mono text-text-secondary">
+                <td className="px-4 py-3 text-text-secondary">
                   {r.classification_confidence != null
-                    ? `${(r.classification_confidence * 100).toFixed(1)}%`
+                    ? `${Math.round(r.classification_confidence * 100)}%`
                     : "—"}
                 </td>
                 <td className="px-4 py-3 text-text-muted whitespace-nowrap">{formatDateTime(r.created_at)}</td>
