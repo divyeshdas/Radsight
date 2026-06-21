@@ -91,18 +91,18 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-md">
 
         {/* Logo */}
-        <div className="mb-6">
+        <div className="flex flex-col items-center mb-7">
           <Image
             src="/radsight-logo-color.png"
             alt="RadSight"
-            width={320}
-            height={90}
+            width={200}
+            height={56}
             className="object-contain"
             priority
           />
           <p
-            className="text-sm font-medium tracking-[0.25em] mt-1"
-            style={{ color: "#2E5E31" }}
+            className="text-xs font-semibold tracking-[0.3em] mt-2"
+            style={{ color: "#3D6B40" }}
           >
             RADIOLOGY INTELLIGENCE
           </p>
