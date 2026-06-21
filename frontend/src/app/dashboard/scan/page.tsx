@@ -10,7 +10,7 @@ import { api } from "@/lib/api";
 import { severityColor, formatMs } from "@/lib/utils";
 import {
   Upload, FileText, AlertTriangle, CheckCircle2,
-  Activity, Clock, Brain, Zap, X, FileScan,
+  ClipboardList, Clock, Zap, X, FileScan, FileSearch, Inbox, Sparkles,
 } from "lucide-react";
 import type { SeverityLevel } from "@/types";
 
@@ -48,7 +48,7 @@ function RiskMeter({ score }: { score: number }) {
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <span className="text-sm text-text-muted">Risk Score</span>
-        <span className="text-base font-bold font-mono" style={{ color }}>{pct}%</span>
+        <span className="text-base font-bold" style={{ color }}>{pct}%</span>
       </div>
       <div className="h-2.5 rounded-full overflow-hidden" style={{ background: "var(--bg-surface)" }}>
         <div
@@ -80,7 +80,7 @@ function ResultPanel({ result }: { result: ScanResult }) {
               {isCritical ? "Critical Findings Detected" : "Analysis Complete"}
             </span>
           </div>
-          <p className="text-sm text-text-muted font-mono">Patient: {result.patient_id}</p>
+          <p className="text-sm text-text-muted font-semibold">Patient: {result.patient_id}</p>
         </div>
         <Badge
           variant="severity"
@@ -118,7 +118,7 @@ function ResultPanel({ result }: { result: ScanResult }) {
         ].map(({ icon: Icon, label, value, color }) => (
           <div key={label} className="rounded-lg p-4 text-center" style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)" }}>
             <Icon size={16} style={{ color }} className="mx-auto mb-1.5" />
-            <p className="text-base font-bold font-mono" style={{ color }}>{value}</p>
+            <p className="text-base font-bold" style={{ color }}>{value}</p>
             <p className="text-xs text-text-muted mt-1">{label}</p>
           </div>
         ))}
@@ -127,7 +127,7 @@ function ResultPanel({ result }: { result: ScanResult }) {
       {/* AI Summary */}
       {result.ai_summary && (
         <div className="rounded-lg p-4" style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)" }}>
-          <p className="text-xs uppercase tracking-wider text-text-muted mb-2">AI Assessment</p>
+          <p className="text-xs font-medium text-text-muted mb-2">AI Assessment</p>
           <p className="text-sm text-text-secondary leading-relaxed">{result.ai_summary}</p>
         </div>
       )}
@@ -135,7 +135,7 @@ function ResultPanel({ result }: { result: ScanResult }) {
       {/* Tags */}
       {tags.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs uppercase tracking-wider text-text-muted">Detected Conditions</p>
+          <p className="text-xs font-medium text-text-muted">Detected Conditions</p>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag) => (
               <span
@@ -288,7 +288,7 @@ export default function ScanPage() {
 
             <Card glass>
               <div className="flex items-center gap-2 mb-5">
-                <Activity size={16} className="text-accent-blue" />
+                <ClipboardList size={16} className="text-accent-blue" />
                 <span className="text-base font-semibold text-text-primary">Patient Details</span>
               </div>
 
@@ -330,7 +330,7 @@ export default function ScanPage() {
                 loading={loading}
                 disabled={!file || !patientId.trim()}
               >
-                <Brain size={15} />
+                <Sparkles size={15} />
                 {loading ? "Analyzing…" : "Run AI Analysis"}
               </Button>
             </Card>
@@ -340,7 +340,7 @@ export default function ScanPage() {
           <div className="flex flex-col">
             <Card glass className="flex-1">
               <div className="flex items-center gap-2 mb-5">
-                <Activity size={16} className="text-accent-blue" />
+                <FileSearch size={16} className="text-accent-blue" />
                 <span className="text-base font-semibold text-text-primary">Analysis Results</span>
               </div>
 
@@ -349,7 +349,7 @@ export default function ScanPage() {
               ) : (
                 <div className="flex flex-col items-center justify-center h-full gap-4 text-center pb-10">
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: "var(--bg-primary)" }}>
-                    <Brain size={28} className="text-text-muted" />
+                    <Inbox size={28} className="text-text-muted" />
                   </div>
                   <div>
                     <p className="text-base font-medium text-text-primary">No results yet</p>
